@@ -18,7 +18,7 @@
   <section id="installation">
     <h2>Installation</h2>
     <p>To get started, follow these steps: 👍 </p>
-    <pre><code>git clone https://github.com/yourusername/community-hub.git
+    <pre><code>git clone https://github.com/yourusername/event-vista.git
 cd event-vista
 npm install
 </code></pre>
