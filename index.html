@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVENT VISTA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* Navigation Styles */
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .navbar:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px) scale(1.05);
+        }
+        
+        .logo::before {
+            content: "🌱";
+            margin-right: 8px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.3s ease;
+            transform: translateY(100%);
+        }
+        
+        .nav-link:hover {
+            color: white;
+        }
+        
+        .nav-link:hover::before {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Main Content Styles */
+        
+        .content-wrapper {
+            padding-top: 80px;
+            position: relative;
+            z-index: 1;
+        }
+        /* Hero Section Styles */
+        
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(6, 214, 160, 0.05));
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 1s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.5;
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .hero-content:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(67, 97, 238, 0.2);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        
+        .hero-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .hero-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+        
+        .hero-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .hero-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .hero-btn:hover::after {
+            opacity: 0.3;
+            animation: pulse-light 1.5s infinite;
+        }
+        
+        @keyframes pulse-light {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.1;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+        }
+        
+        #hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        /* Background Container */
+        
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            height: 100%;
+            position: relative;
+        }
+        
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(6, 214, 160, 0.1));
+            opacity: 0;
+            z-index: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(67, 97, 238, 0.2);
+        }
+        
+        .event-card:hover::before {
+            opacity: 1;
+        }
+        
+        .event-card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            position: relative;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .event-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .event-card-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-right: 100px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .event-category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover .event-category {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .event-card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .event-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: rgba(67, 97, 238, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover .event-meta {
+            background: rgba(67, 97, 238, 0.08);
+            transform: translateY(-3px);
+        }
+        
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-color);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .event-meta-item i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover .event-meta-item i {
+            transform: scale(1.2);
+            color: var(--accent-color);
+        }
+        
+        .event-description {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex-grow: 1;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover .event-description {
+            color: var(--text-color);
+        }
+        
+        .event-card-footer {
+            padding: 1.5rem;
+            background: rgba(67, 97, 238, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            border-top: 1px solid rgba(67, 97, 238, 0.1);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover .event-card-footer {
+            background: rgba(67, 97, 238, 0.08);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:hover::before {
+            opacity: 1;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .btn:hover::after {
+            opacity: 0.3;
+            animation: pulse-light 1.5s infinite;
+        }
+        
+        .no-events {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            grid-column: 1 / -1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .no-events::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(6, 214, 160, 0.05));
+            z-index: 0;
+        }
+        
+        .no-events i {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            font-size: 3.5rem;
+            position: relative;
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        
+        .no-events p {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .search-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .search-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .search-tag:hover {
+            background: rgba(67, 97, 238, 0.2);
+            transform: translateY(-3px) scale(1.05);
+            color: var(--primary-color);
+        }
+        
+        .search-tag:hover::before {
+            opacity: 0.1;
+        }
+        
+        .search-tag.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .search-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid rgba(67, 97, 238, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1), 0 8px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .search-bar button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .search-bar button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .search-bar button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+        }
+        
+        .search-bar button:hover::before {
+            opacity: 1;
+        }
+        
+        .search-bar button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .search-bar button:hover::after {
+            opacity: 0.3;
+            animation: pulse-light 1.5s infinite;
+        }
+        
+        .search-tags {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        /* Impact Stats Styles */
+        
+        .impact-stats {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(6, 214, 160, 0.05));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .impact-stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .impact-stats .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .impact-stats h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .impact-stats h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.8s ease-out;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(6, 214, 160, 0.05));
+            opacity: 0;
+            z-index: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(67, 97, 238, 0.2);
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        .stat-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.3);
+        }
+        
+        .stat-icon::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            opacity: 0.3;
+            z-index: -1;
+            animation: pulse-ring 2s infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.1;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+        
+        .stat-card:hover .stat-number {
+            transform: scale(1.1);
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* CTA Section Styles */
+        
+        .cta {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(6, 214, 160, 0.1));
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .cta .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .cta h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .cta-buttons .btn {
+            min-width: 180px;
+        }
+        /* Footer Styles */
+        
+        .footer {
+            background: white;
+            padding: 4rem 0 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+        
+        .footer-section p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+        /* Responsive Styles */
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .event-meta {
+                grid-template-columns: 1fr;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .cta-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            .navbar .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-container"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vista</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="create-event.html" class="nav-link" id="createEventLink" style="display: none;">Create Event</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;">Profile</a>
+                <a href="auth.html" class="nav-link" id="authLink">Login</a>
+                <a href="#" class="nav-link" id="logoutLink" style="display: none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <section class="hero">
+            <div id="hero-background"></div>
+            <div class="hero-content">
+                <h1>Welcome to Event Vista</h1>
+                <p>Connect with your community, discover events, and make a difference together.</p>
+                <a href="events.html" class="hero-btn">Explore Events</a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>What We Offer</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-calendar-alt fa-3x" style="color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h3>Community Events</h3>
+                        <p>Discover and participate in local events that bring people together and strengthen our community.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-hands-helping fa-3x" style="color: var(--secondary-color); margin-bottom: 1rem;"></i>
+                        <h3>Volunteer Opportunities</h3>
+                        <p>Find meaningful ways to contribute your time and skills to causes that matter to you.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-heart fa-3x" style="color: var(--accent-color); margin-bottom: 1rem;"></i>
+                        <h3>Support Local</h3>
+                        <p>Help build a stronger, more connected community by supporting local initiatives and organizations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="upcoming-events">
+            <div class="container">
+                <h2>Upcoming Events</h2>
+                <div class="search-container">
+                    <div class="search-bar">
+                        <input type="text" id="event-search" placeholder="Search events by keyword..." aria-label="Search events">
+                        <button type="button" id="search-button" aria-label="Search"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="search-tags">
+                        <span class="search-tag" data-keyword="community">Community</span>
+                        <span class="search-tag" data-keyword="volunteer">Volunteer</span>
+                        <span class="search-tag" data-keyword="education">Education</span>
+                        <span class="search-tag" data-keyword="charity">Charity</span>
+                    </div>
+                </div>
+                <div id="events-container" class="events-grid">
+                    <!-- Events will be populated by JavaScript -->
+                </div>
+                <div class="text-center" style="margin-top: 2rem;">
+                    <a href="events.html" class="btn btn-primary" id="viewAllEventsBtn">View All Events</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-stats">
+            <div class="container">
+                <h2>Our Community Impact</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number" id="total-participants">0</div>
+                        <div class="stat-label">Community Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-number" id="total-events">0</div>
+                        <div class="stat-label">Events Created</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="stat-number" id="total-volunteers">0</div>
+                        <div class="stat-label">Volunteer Hours</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2>Ready to Make a Difference?</h2>
+                <p>Join our community today and start creating positive change in your neighborhood.</p>
+                <div class="cta-buttons">
+                    <a href="auth.html" class="btn" id="signupBtn">Sign Up Now</a>
+                    <a href="./events.html" class="btn btn-primary" onclick="window.location.href='events.html'">Browse Events</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Community Events</h3>
+                    <p>Bringing people together through meaningful events and activities.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Volunteer Opportunities</h3>
+                    <p>Make a difference in your community by volunteering.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Support Local</h3>
+                    <p>Help build a stronger, more connected community.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 EVENT VISTA . All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        let scene,
+            camera,
+            renderer,
+            particles;
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        function initBackground() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('background-container').appendChild(renderer.domElement);
+
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 1000; i++) {
+                vertices.push(
+                    THREE.MathUtils.randFloatSpread(2000),
+                    THREE.MathUtils.randFloatSpread(2000),
+                    THREE.MathUtils.randFloatSpread(2000)
+                );
+
+                // Create gradient colors matching the theme
+                const color = new THREE.Color();
+                color.setHSL(Math.random() * 0.2 + 0.5, 0.7, 0.5); // Blue-green gradient
+                colors.push(color.r, color.g, color.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 2,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6,
+                sizeAttenuation: true
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+            camera.position.z = 1000;
+
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onMouseMove(event) {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.1;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.1;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            camera.position.y += (targetY - camera.position.y) * 0.05;
+            particles.rotation.x += 0.001;
+            particles.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+
+        // Hero section 3D background
+        let heroScene, heroCamera, heroRenderer, heroParticles;
+        let heroMouseX = 0;
+        let heroMouseY = 0;
+        let heroTargetX = 0;
+        let heroTargetY = 0;
+
+        function initHeroBackground() {
+            heroScene = new THREE.Scene();
+            heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            heroRenderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            heroRenderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('hero-background').appendChild(heroRenderer.domElement);
+
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 500; i++) {
+                vertices.push(
+                    THREE.MathUtils.randFloatSpread(1000),
+                    THREE.MathUtils.randFloatSpread(1000),
+                    THREE.MathUtils.randFloatSpread(1000)
+                );
+
+                // Create gradient colors matching the theme
+                const color = new THREE.Color();
+                color.setHSL(Math.random() * 0.2 + 0.5, 0.7, 0.5); // Blue-green gradient
+                colors.push(color.r, color.g, color.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6,
+                sizeAttenuation: true
+            });
+
+            heroParticles = new THREE.Points(geometry, material);
+            heroScene.add(heroParticles);
+
+            // Add ambient light with theme colors
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            heroScene.add(ambientLight);
+
+            // Add point light with theme colors
+            const pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.set(0, 0, 500);
+            heroScene.add(pointLight);
+
+            heroCamera.position.z = 800;
+
+            window.addEventListener('mousemove', onHeroMouseMove);
+            window.addEventListener('resize', onHeroWindowResize);
+        }
+
+        function onHeroMouseMove(event) {
+            const heroSection = document.querySelector('.hero');
+            const rect = heroSection.getBoundingClientRect();
+            heroMouseX = (event.clientX - rect.left - rect.width / 2) * 0.1;
+            heroMouseY = (event.clientY - rect.top - rect.height / 2) * 0.1;
+        }
+
+        function onHeroWindowResize() {
+            const heroSection = document.querySelector('.hero');
+            heroCamera.aspect = heroSection.clientWidth / heroSection.clientHeight;
+            heroCamera.updateProjectionMatrix();
+            heroRenderer.setSize(heroSection.clientWidth, heroSection.clientHeight);
+        }
+
+        function animateHero() {
+            requestAnimationFrame(animateHero);
+
+            // Smooth camera movement
+            heroTargetX += (heroMouseX - heroTargetX) * 0.05;
+            heroTargetY += (heroMouseY - heroTargetY) * 0.05;
+
+            heroCamera.position.x += (heroTargetX - heroCamera.position.x) * 0.05;
+            heroCamera.position.y += (heroTargetY - heroCamera.position.y) * 0.05;
+
+            // Rotate particles
+            heroParticles.rotation.x += 0.0005;
+            heroParticles.rotation.y += 0.0005;
+
+            // Add wave effect
+            const time = Date.now() * 0.001;
+            heroParticles.rotation.x += Math.sin(time) * 0.0002;
+            heroParticles.rotation.y += Math.cos(time) * 0.0002;
+
+            heroRenderer.render(heroScene, heroCamera);
+        }
+
+        // Initialize backgrounds immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            initBackground();
+            animate();
+            initHeroBackground();
+            animateHero();
+
+            // Check authentication state
+            const user = JSON.parse(localStorage.getItem('user'));
+            const authLink = document.getElementById('authLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const profileLink = document.getElementById('profileLink');
+            const createEventLink = document.getElementById('createEventLink');
+
+            if (user) {
+                // User is logged in
+                authLink.style.display = 'none';
+                logoutLink.style.display = 'block';
+                profileLink.style.display = 'block';
+                createEventLink.style.display = user.role === 'organizer' ? 'block' : 'none';
+            } else {
+                // User is not logged in
+                authLink.style.display = 'block';
+                logoutLink.style.display = 'none';
+                profileLink.style.display = 'none';
+                createEventLink.style.display = 'none';
+            }
+
+            // Handle logout
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+
+            // Load events for the home page
+            function loadHomeEvents(searchTerm = '', category = '') {
+                const eventsContainer = document.getElementById('events-container');
+                let events = JSON.parse(localStorage.getItem('events')) || [];
+
+                // Sort events by date (most recent first)
+                events.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Filter events based on search term and category
+                if (searchTerm || category) {
+                    events = events.filter(event => {
+                        const matchesSearch = searchTerm ?
+                            event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            event.category.toLowerCase().includes(searchTerm.toLowerCase()) : true;
+
+                        const matchesCategory = category ?
+                            event.category.toLowerCase() === category.toLowerCase() : true;
+
+                        return matchesSearch && matchesCategory;
+                    });
+                }
+
+                // Show only the first 3 events on the home page
+                const recentEvents = events.slice(0, 3);
+
+                if (recentEvents.length === 0) {
+                    eventsContainer.innerHTML = `
+                        <div class="no-events">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No events found. Try adjusting your search criteria.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                eventsContainer.innerHTML = recentEvents.map(event => {
+                    // Ensure participants array exists
+                    const participants = event.participants || [];
+                    const maxParticipants = event.maxParticipants || 0;
+
+                    return `
+                        <div class="event-card">
+                            <div class="event-card-header">
+                                <h3>${event.title}</h3>
+                                <span class="event-category">${event.category}</span>
+                            </div>
+                            <div class="event-card-body">
+                                <div class="event-meta">
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>${new Date(event.date).toLocaleDateString()}</span>
+                                    </div>
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>${event.time}</span>
+                                    </div>
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${event.location}</span>
+                                    </div>
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>${participants.length}/${maxParticipants}</span>
+                                    </div>
+                                </div>
+                                <p class="event-description">${event.description}</p>
+                            </div>
+                            <div class="event-card-footer">
+                                <a href="event-details.html?id=${event.id}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Handle search functionality
+            const searchInput = document.getElementById('event-search');
+            const searchButton = document.getElementById('search-button');
+            const searchTags = document.querySelectorAll('.search-tag');
+
+            function performSearch() {
+                const searchTerm = searchInput.value.trim();
+                const activeTag = document.querySelector('.search-tag.active');
+                const category = activeTag ? activeTag.dataset.keyword : '';
+                loadHomeEvents(searchTerm, category);
+            }
+
+            // Search input event listener
+            searchInput.addEventListener('input', performSearch);
+
+            // Search button event listener
+            searchButton.addEventListener('click', performSearch);
+
+            // Search tags event listeners
+            searchTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Toggle active class on clicked tag
+                    if (this.classList.contains('active')) {
+                        // If already active, deactivate it
+                        this.classList.remove('active');
+                        searchInput.value = '';
+                    } else {
+                        // Remove active class from all tags
+                        searchTags.forEach(t => t.classList.remove('active'));
+
+                        // Add active class to clicked tag
+                        this.classList.add('active');
+
+                        // Update search input with tag text
+                        searchInput.value = this.textContent;
+                    }
+
+                    // Perform search
+                    performSearch();
+                });
+            });
+
+            // Handle View All Events button
+            const viewAllEventsBtn = document.getElementById('viewAllEventsBtn');
+            if (viewAllEventsBtn) {
+                viewAllEventsBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'events.html';
+                });
+            }
+
+            // Initial load of events
+            loadHomeEvents();
+
+            // Update impact stats
+            function updateImpactStats() {
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+
+                // Calculate total participants across all events
+                let totalParticipants = 0;
+                events.forEach(event => {
+                    if (event.participants) {
+                        totalParticipants += event.participants.length;
+                    }
+                });
+
+                // Update stats
+                document.getElementById('total-participants').textContent = totalParticipants;
+                document.getElementById('total-events').textContent = events.length;
+                document.getElementById('total-volunteers').textContent = totalParticipants * 2; // Estimate 2 hours per participant
+
+                // Show/hide signup button based on login status
+                const signupBtn = document.getElementById('signupBtn');
+                if (user) {
+                    signupBtn.style.display = 'none';
+                } else {
+                    signupBtn.style.display = 'inline-block';
+                }
+            }
+
+            // Call updateImpactStats
+            updateImpactStats();
+        });
+    </script>
+</body>
+
+</html>

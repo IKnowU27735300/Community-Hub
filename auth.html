@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .auth-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .auth-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+        }
+        
+        .role-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .role-option {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .role-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        .role-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-container"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="auth.html" class="nav-link" id="authLink">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="register">Register</div>
+            </div>
+
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-input" required>
+                    <div class="error-message" id="loginEmailError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-input" required>
+                    <div class="error-message" id="loginPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Select Role</label>
+                    <div class="role-options">
+                        <div class="role-option" data-role="participant">
+                            <i class="fas fa-user-friends"></i>
+                            <div>Participant</div>
+                        </div>
+                        <div class="role-option" data-role="volunteer">
+                            <i class="fas fa-hands-helping"></i>
+                            <div>Volunteer</div>
+                        </div>
+                        <div class="role-option" data-role="organizer">
+                            <i class="fas fa-calendar-check"></i>
+                            <div>Organizer</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="loginRole" required>
+                    <div class="error-message" id="loginRoleError"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" class="form-input" required>
+                    <div class="error-message" id="registerNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" class="form-input" required>
+                    <div class="error-message" id="registerEmailError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" class="form-input" required>
+                    <div class="error-message" id="registerPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" required>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Select Role</label>
+                    <div class="role-options">
+                        <div class="role-option" data-role="participant">
+                            <i class="fas fa-user-friends"></i>
+                            <div>Participant</div>
+                        </div>
+                        <div class="role-option" data-role="volunteer">
+                            <i class="fas fa-hands-helping"></i>
+                            <div>Volunteer</div>
+                        </div>
+                        <div class="role-option" data-role="organizer">
+                            <i class="fas fa-calendar-check"></i>
+                            <div>Organizer</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="registerRole" required>
+                    <div class="error-message" id="registerRoleError"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Admin credentials
+            const adminCredentials = {
+                email: 'admin@communityhub.com',
+                password: 'Admin@123',
+                role: 'admin'
+            };
+
+            // Tab switching
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+            const roleOptions = document.querySelectorAll('.role-option');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Update active form
+                    forms.forEach(form => form.classList.remove('active'));
+                    document.getElementById(`${tabName}Form`).classList.add('active');
+                });
+            });
+
+            // Role selection
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const role = this.dataset.role;
+                    const form = this.closest('form');
+                    const roleInput = form.querySelector('input[type="hidden"]');
+
+                    // Update selected role
+                    roleOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    roleInput.value = role;
+                });
+            });
+
+            // Handle login form submission
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const role = document.getElementById('loginRole').value;
+
+                // Check for admin login
+                if (email === adminCredentials.email && password === adminCredentials.password) {
+                    localStorage.setItem('user', JSON.stringify({
+                        email: adminCredentials.email,
+                        role: adminCredentials.role,
+                        name: 'Admin'
+                    }));
+                    window.location.href = 'admin-panel.html';
+                    return;
+                }
+
+                // Handle regular user login
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.email === email && u.password === password && u.role === role);
+
+                if (user) {
+                    localStorage.setItem('user', JSON.stringify({
+                        email: user.email,
+                        role: user.role,
+                        name: user.name
+                    }));
+                    window.location.href = 'index.html';
+                } else {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.textContent = 'Invalid email, password, or role';
+                    errorDiv.style.display = 'block';
+                    loginForm.insertBefore(errorDiv, loginForm.querySelector('button'));
+
+                    setTimeout(() => {
+                        errorDiv.remove();
+                    }, 3000);
+                }
+            });
+
+            // Handle register form submission
+            const registerForm = document.getElementById('registerForm');
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = document.getElementById('registerRole').value;
+
+                // Validate form
+                if (!name || !email || !password || !confirmPassword || !role) {
+                    showError('Please fill in all fields', registerForm);
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showError('Passwords do not match', registerForm);
+                    return;
+                }
+
+                // Check if email already exists
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                if (users.some(u => u.email === email)) {
+                    showError('Email already registered', registerForm);
+                    return;
+                }
+
+                // Create new user
+                const newUser = {
+                    email,
+                    password,
+                    role,
+                    name
+                };
+
+                // Save user
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('user', JSON.stringify({
+                    email: newUser.email,
+                    role: newUser.role,
+                    name: newUser.name
+                }));
+                window.location.href = 'index.html';
+            });
+
+            function showError(message, form) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+
+                form.insertBefore(errorDiv, form.querySelector('button'));
+
+                setTimeout(() => {
+                    errorDiv.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>

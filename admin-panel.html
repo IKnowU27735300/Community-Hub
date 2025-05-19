@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        
+        .admin-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+        
+        .admin-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .admin-content {
+            display: none;
+        }
+        
+        .admin-content.active {
+            display: block;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-card h3 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background: var(--bg-color);
+            font-weight: 600;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            margin-right: 0.5rem;
+        }
+        
+        .edit-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .delete-btn {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">Event Vesta</a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="events.html" class="nav-link">Events</a>
+                    <a href="#" class="nav-link" id="logoutLink">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Admin Panel</h1>
+            <div class="admin-actions">
+                <button class="btn btn-primary" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh Data
+                </button>
+                <button class="btn btn-danger" id="deleteAllEventsBtn">
+                    <i class="fas fa-trash"></i>
+                    Delete All Events
+                </button>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="value" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Events</h3>
+                <div class="value" id="totalEvents">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Events</h3>
+                <div class="value" id="activeEvents">0</div>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <div class="admin-tab active" data-tab="users">Users</div>
+            <div class="admin-tab" data-tab="events">Events</div>
+        </div>
+
+        <div id="usersContent" class="admin-content active">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="eventsContent" class="admin-content">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Organizer</th>
+                            <th>Participants</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTableBody">
+                        <!-- Events will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is admin
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'admin') {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Handle logout
+            document.getElementById('logoutLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+
+            // Tab switching
+            const tabs = document.querySelectorAll('.admin-tab');
+            const contents = document.querySelectorAll('.admin-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Update active content
+                    contents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabName}Content`).classList.add('active');
+                });
+            });
+
+            // Load data
+            function loadData() {
+                // Load users
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const usersTableBody = document.getElementById('usersTableBody');
+                usersTableBody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="editUser('${user.email}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteUser('${user.email}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Load events
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                const eventsTableBody = document.getElementById('eventsTableBody');
+                eventsTableBody.innerHTML = events.map(event => `
+                    <tr>
+                        <td>${event.title}</td>
+                        <td>${event.category}</td>
+                        <td>${new Date(event.date).toLocaleDateString()}</td>
+                        <td>${event.organizer}</td>
+                        <td>${event.participants ? event.participants.length : 0}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="editEvent('${event.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteEvent('${event.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Update stats
+                document.getElementById('totalUsers').textContent = users.length;
+                document.getElementById('totalEvents').textContent = events.length;
+                document.getElementById('activeEvents').textContent = events.filter(e => new Date(e.date) >= new Date()).length;
+            }
+
+            // Refresh button
+            document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+            // Edit user function
+            window.editUser = function(email) {
+                // Implement edit user functionality
+                alert('Edit user: ' + email);
+            };
+
+            // Delete user function
+            window.deleteUser = function(email) {
+                if (confirm('Are you sure you want to delete this user?')) {
+                    const users = JSON.parse(localStorage.getItem('users')) || [];
+                    const updatedUsers = users.filter(u => u.email !== email);
+                    localStorage.setItem('users', JSON.stringify(updatedUsers));
+                    loadData();
+                }
+            };
+
+            // Edit event function
+            window.editEvent = function(id) {
+                window.location.href = `create-event.html?id=${id}`;
+            };
+
+            // Delete event function
+            window.deleteEvent = function(id) {
+                if (confirm('Are you sure you want to delete this event?')) {
+                    const events = JSON.parse(localStorage.getItem('events')) || [];
+                    const updatedEvents = events.filter(e => e.id !== id);
+                    localStorage.setItem('events', JSON.stringify(updatedEvents));
+                    loadData();
+                }
+            };
+
+            // Delete all events function
+            window.deleteAllEvents = function() {
+                if (confirm('Are you sure you want to delete ALL events? This action cannot be undone.')) {
+                    localStorage.setItem('events', JSON.stringify([]));
+                    loadData();
+                    alert('All events have been deleted successfully.');
+                }
+            };
+
+            // Add event listener for delete all events button
+            document.getElementById('deleteAllEventsBtn').addEventListener('click', deleteAllEvents);
+
+            // Initial load
+            loadData();
+        });
+    </script>
+</body>
+
+</html>

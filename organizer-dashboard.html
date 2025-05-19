@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Dashboard - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .dashboard-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .dashboard-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .event-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .event-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .event-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #ff4444;
+            color: white;
+        }
+        
+        .btn-icon:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-container"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="create-event.html" class="nav-link">Create Event</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="#" class="nav-link" id="logoutLink">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Organizer Dashboard</h1>
+                <a href="create-event.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Event
+                </a>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Total Events</h3>
+                    <div class="number" id="totalEvents">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Upcoming Events</h3>
+                    <div class="number" id="upcomingEvents">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Participants</h3>
+                    <div class="number" id="totalParticipants">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Volunteers</h3>
+                    <div class="number" id="totalVolunteers">0</div>
+                </div>
+            </div>
+
+            <div class="dashboard-tabs">
+                <div class="dashboard-tab active" data-tab="upcoming">Upcoming Events</div>
+                <div class="dashboard-tab" data-tab="past">Past Events</div>
+                <div class="dashboard-tab" data-tab="drafts">Drafts</div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="event-list" id="eventList">
+                    <!-- Events will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and is an organizer
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'organizer') {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Load dashboard data
+            loadDashboardData();
+
+            // Handle tab switching
+            const tabs = document.querySelectorAll('.dashboard-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    loadEvents(this.dataset.tab);
+                });
+            });
+
+            // Handle logout
+            document.getElementById('logoutLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+        });
+
+        function loadDashboardData() {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            // Filter events for this organizer
+            const organizerEvents = events.filter(event => event.organizerId === user.email);
+
+            // Update stats
+            document.getElementById('totalEvents').textContent = organizerEvents.length;
+            document.getElementById('upcomingEvents').textContent = organizerEvents.filter(event =>
+                new Date(event.date) > new Date()
+            ).length;
+            document.getElementById('totalParticipants').textContent = organizerEvents.reduce((acc, event) =>
+                acc + (event.participants || []).length, 0
+            );
+            document.getElementById('totalVolunteers').textContent = organizerEvents.reduce((acc, event) =>
+                acc + (event.volunteers || []).length, 0
+            );
+
+            // Load events
+            loadEvents('upcoming');
+        }
+
+        function loadEvents(type) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const user = JSON.parse(localStorage.getItem('user'));
+            const now = new Date();
+
+            let filteredEvents = events.filter(event => event.organizerId === user.email);
+
+            switch (type) {
+                case 'upcoming':
+                    filteredEvents = filteredEvents.filter(event => new Date(event.date) > now);
+                    break;
+                case 'past':
+                    filteredEvents = filteredEvents.filter(event => new Date(event.date) <= now);
+                    break;
+                case 'drafts':
+                    filteredEvents = filteredEvents.filter(event => event.status === 'draft');
+                    break;
+            }
+
+            const eventList = document.getElementById('eventList');
+            eventList.innerHTML = filteredEvents.map(event => `
+                <div class="event-card">
+                    <div class="event-info">
+                        <h3>${event.title}</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> ${new Date(event.date).toLocaleDateString()}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> ${event.location}</span>
+                            <span><i class="fas fa-users"></i> ${event.participants?.length || 0} participants</span>
+                        </div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn-icon btn-edit" onclick="editEvent('${event.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon btn-delete" onclick="deleteEvent('${event.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editEvent(eventId) {
+            window.location.href = `create-event.html?id=${eventId}`;
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                const updatedEvents = events.filter(event => event.id !== eventId);
+                localStorage.setItem('events', JSON.stringify(updatedEvents));
+                loadDashboardData();
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Dashboard - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .dashboard-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .dashboard-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .opportunity-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .opportunity-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .opportunity-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .opportunity-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .opportunity-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-join {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-leave {
+            background: #ff4444;
+            color: white;
+        }
+        
+        .btn-icon:hover {
+            transform: translateY(-2px);
+        }
+        
+        .skill-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .skill-tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-container"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="#" class="nav-link" id="logoutLink">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Volunteer Dashboard</h1>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Total Hours</h3>
+                    <div class="number" id="totalHours">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Upcoming Events</h3>
+                    <div class="number" id="upcomingEvents">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Completed Events</h3>
+                    <div class="number" id="completedEvents">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Skills Used</h3>
+                    <div class="number" id="skillsUsed">0</div>
+                </div>
+            </div>
+
+            <div class="dashboard-tabs">
+                <div class="dashboard-tab active" data-tab="upcoming">Upcoming Opportunities</div>
+                <div class="dashboard-tab" data-tab="current">Current Events</div>
+                <div class="dashboard-tab" data-tab="past">Past Events</div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="opportunity-list" id="opportunityList">
+                    <!-- Opportunities will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and is a volunteer
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'volunteer') {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Load dashboard data
+            loadDashboardData();
+
+            // Handle tab switching
+            const tabs = document.querySelectorAll('.dashboard-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    loadOpportunities(this.dataset.tab);
+                });
+            });
+
+            // Handle logout
+            document.getElementById('logoutLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+        });
+
+        function loadDashboardData() {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const user = JSON.parse(localStorage.getItem('user'));
+            const now = new Date();
+
+            // Filter events where user is a volunteer
+            const volunteerEvents = events.filter(event =>
+                event.volunteers ? .includes(user.email)
+            );
+
+            // Calculate stats
+            const totalHours = volunteerEvents.reduce((acc, event) =>
+                acc + (event.hours || 0), 0
+            );
+            const upcomingEvents = volunteerEvents.filter(event =>
+                new Date(event.date) > now
+            ).length;
+            const completedEvents = volunteerEvents.filter(event =>
+                new Date(event.date) <= now
+            ).length;
+            const skillsUsed = new Set(volunteerEvents.flatMap(event =>
+                event.requiredSkills || []
+            )).size;
+
+            // Update stats
+            document.getElementById('totalHours').textContent = totalHours;
+            document.getElementById('upcomingEvents').textContent = upcomingEvents;
+            document.getElementById('completedEvents').textContent = completedEvents;
+            document.getElementById('skillsUsed').textContent = skillsUsed;
+
+            // Load opportunities
+            loadOpportunities('upcoming');
+        }
+
+        function loadOpportunities(type) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const user = JSON.parse(localStorage.getItem('user'));
+            const now = new Date();
+
+            let filteredEvents = events;
+            const userSkills = user.skills || [];
+
+            switch (type) {
+                case 'upcoming':
+                    filteredEvents = events.filter(event =>
+                        new Date(event.date) > now &&
+                        !event.volunteers ? .includes(user.email)
+                    );
+                    break;
+                case 'current':
+                    filteredEvents = events.filter(event =>
+                        new Date(event.date) > now &&
+                        event.volunteers ? .includes(user.email)
+                    );
+                    break;
+                case 'past':
+                    filteredEvents = events.filter(event =>
+                        new Date(event.date) <= now &&
+                        event.volunteers ? .includes(user.email)
+                    );
+                    break;
+            }
+
+            const opportunityList = document.getElementById('opportunityList');
+            opportunityList.innerHTML = filteredEvents.map(event => `
+                <div class="opportunity-card">
+                    <div class="opportunity-info">
+                        <h3>${event.title}</h3>
+                        <div class="opportunity-meta">
+                            <span><i class="fas fa-calendar"></i> ${new Date(event.date).toLocaleDateString()}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> ${event.location}</span>
+                            <span><i class="fas fa-clock"></i> ${event.hours || 0} hours</span>
+                        </div>
+                        <div class="skill-tags">
+                            ${(event.requiredSkills || []).map(skill => `
+                                <span class="skill-tag ${userSkills.includes(skill) ? 'matched' : ''}">
+                                    ${skill}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="opportunity-actions">
+                        ${type === 'upcoming' ? `
+                            <button class="btn-icon btn-join" onclick="joinEvent('${event.id}')">
+                                <i class="fas fa-plus"></i> Join
+                            </button>
+                        ` : type === 'current' ? `
+                            <button class="btn-icon btn-leave" onclick="leaveEvent('${event.id}')">
+                                <i class="fas fa-times"></i> Leave
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function joinEvent(eventId) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const user = JSON.parse(localStorage.getItem('user'));
+            
+            const event = events.find(e => e.id === eventId);
+            if (event) {
+                if (!event.volunteers) {
+                    event.volunteers = [];
+                }
+                event.volunteers.push(user.email);
+                localStorage.setItem('events', JSON.stringify(events));
+                loadDashboardData();
+            }
+        }
+
+        function leaveEvent(eventId) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const user = JSON.parse(localStorage.getItem('user'));
+            
+            const event = events.find(e => e.id === eventId);
+            if (event && event.volunteers) {
+                event.volunteers = event.volunteers.filter(v => v !== user.email);
+                localStorage.setItem('events', JSON.stringify(events));
+                loadDashboardData();
+            }
+        }
+    </script>
+</body>
+
+</html>

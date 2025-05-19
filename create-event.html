@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+         :root {
+            --primary-color: #4a90e2;
+            --primary-dark: #357abd;
+            --secondary-color: #6c63ff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+        }
+        
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .logo::before {
+            content: "🌱";
+            margin-right: 8px;
+        }
+        
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .create-event-section {
+            padding: 3rem 0;
+        }
+        
+        .create-event-section h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .create-event-section h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+        
+        .event-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid rgba(67, 97, 238, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #ff4444;
+        }
+        
+        .error-message {
+            color: #ff4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .form-group.error .error-message {
+            display: block;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-section h3 {
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .capacity-container {
+            position: relative;
+        }
+        
+        .capacity-display {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .form-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .form-actions .btn {
+            min-width: 150px;
+        }
+        
+        .form-actions .btn-secondary {
+            background: var(--text-light);
+            margin-right: 1rem;
+        }
+        
+        .form-actions .btn-secondary:hover {
+            background: var(--text-color);
+        }
+        
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+        
+        .form-required {
+            color: var(--accent-color);
+            margin-left: 0.25rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="create-event.html" class="nav-link">Create Event</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="auth.html" class="nav-link" id="authLink">Login</a>
+                <a href="#" class="nav-link" id="logoutLink" style="display: none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" style="padding: 3rem 0; background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(108, 99, 255, 0.1));">
+        <div class="container">
+            <h1 class="animate-slide-down">Create a New Event</h1>
+            <p class="animate-slide-up delay-1">Organize an event that brings your community together.</p>
+        </div>
+    </section>
+
+    <section class="create-event-section">
+        <div class="container">
+            <div class="event-form animate-slide-up delay-2">
+                <form id="eventForm">
+                    <div class="form-section">
+                        <h3 class="form-section-title">Basic Information</h3>
+                        <div class="form-group">
+                            <label for="title">Event Title *</label>
+                            <input type="text" id="title" name="title" required>
+                            <div class="error-message">Please enter an event title</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Event Description *</label>
+                            <textarea id="description" name="description" rows="4" required></textarea>
+                            <div class="error-message">Please enter an event description</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="category">Category *</label>
+                                    <select id="category" name="category" required>
+                                        <option value="">Select a category</option>
+                                        <option value="community">Community</option>
+                                        <option value="volunteer">Volunteer</option>
+                                        <option value="education">Education</option>
+                                        <option value="charity">Charity</option>
+                                    </select>
+                                    <div class="error-message">Please select a category</div>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="location">Event Location *</label>
+                                    <input type="text" id="location" name="location" required>
+                                    <div class="error-message">Please enter a location</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">Date & Time</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="date">Date *</label>
+                                    <input type="date" id="date" name="date" required>
+                                    <div class="error-message">Please select a date</div>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="time">Time *</label>
+                                    <input type="time" id="time" name="time" required>
+                                    <div class="error-message">Please select a time</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">Capacity & Pricing</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="maxParticipants">Maximum Participants *</label>
+                                    <input type="number" id="maxParticipants" name="maxParticipants" min="1" required>
+                                    <div class="error-message">Please enter the maximum number of participants</div>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="price">Event Price (Optional)</label>
+                                    <input type="number" id="price" min="0" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn-submit">Create Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section animate-on-scroll">
+                    <h3>Community Events</h3>
+                    <p>Bringing people together through meaningful events and activities.</p>
+                </div>
+                <div class="footer-section animate-on-scroll">
+                    <h3>Volunteer Opportunities</h3>
+                    <p>Make a difference in your community by volunteering.</p>
+                </div>
+                <div class="footer-section animate-on-scroll">
+                    <h3>Support Local</h3>
+                    <p>Help build a stronger, more connected community.</p>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <p>&copy; 2023 Event Vesta. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and is an organizer
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'organizer') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update navigation based on user role
+            const authLink = document.getElementById('authLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const profileLink = document.getElementById('profileLink');
+            const createEventLink = document.getElementById('createEventLink');
+
+            // Only update elements that exist
+            if (authLink) authLink.style.display = 'none';
+            if (logoutLink) logoutLink.style.display = 'block';
+            if (profileLink) profileLink.style.display = 'block';
+            if (createEventLink) createEventLink.style.display = 'block';
+
+            // Handle logout
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = 'index.html';
+                });
+            }
+
+            // Handle form submission
+            const eventForm = document.getElementById('eventForm');
+            if (!eventForm) {
+                console.error('Event form not found');
+                return;
+            }
+
+            eventForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get form values
+                const title = document.getElementById('title').value.trim();
+                const category = document.getElementById('category').value;
+                const date = document.getElementById('date').value;
+                const time = document.getElementById('time').value;
+                const location = document.getElementById('location').value.trim();
+                const description = document.getElementById('description').value.trim();
+                const maxParticipants = document.getElementById('maxParticipants').value;
+                const price = document.getElementById('price').value || 0;
+
+                // Validate form
+                let isValid = true;
+                const formGroups = eventForm.querySelectorAll('.form-group');
+                formGroups.forEach(group => {
+                    const input = group.querySelector('input, select, textarea');
+                    const errorMessage = group.querySelector('.error-message');
+
+                    if (input.hasAttribute('required') && !input.value.trim()) {
+                        group.classList.add('error');
+                        if (errorMessage) errorMessage.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        group.classList.remove('error');
+                        if (errorMessage) errorMessage.style.display = 'none';
+                    }
+                });
+
+                if (!isValid) {
+                    return;
+                }
+
+                // Validate date is not in the past
+                const eventDate = new Date(date + 'T' + time);
+                if (eventDate < new Date()) {
+                    alert('Event date and time must be in the future');
+                    return;
+                }
+
+                // Create event object
+                const event = {
+                    id: Date.now().toString(),
+                    title,
+                    category,
+                    date,
+                    time,
+                    location,
+                    description,
+                    maxParticipants: parseInt(maxParticipants),
+                    price: parseFloat(price),
+                    organizer: user.email,
+                    organizerName: user.name || user.email,
+                    participants: [],
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    // Get existing events from localStorage
+                    let events = JSON.parse(localStorage.getItem('events')) || [];
+
+                    // Add new event
+                    events.push(event);
+
+                    // Save events back to localStorage
+                    localStorage.setItem('events', JSON.stringify(events));
+
+                    // Show success message
+                    const successMessage = document.createElement('div');
+                    successMessage.className = 'success-message';
+                    successMessage.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <p>Event created successfully!</p>
+                    `;
+                    eventForm.appendChild(successMessage);
+
+                    // Clear form
+                    eventForm.reset();
+
+                    // Redirect to events page after 1.5 seconds
+                    setTimeout(() => {
+                        window.location.href = 'events.html';
+                    }, 1500);
+
+                } catch (error) {
+                    console.error('Error saving event:', error);
+                    alert('There was an error creating the event. Please try again.');
+                }
+            });
+
+            // Handle cancel button
+            const cancelBtn = document.getElementById('cancelBtn');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to cancel? All entered information will be lost.')) {
+                        window.location.href = 'events.html';
+                    }
+                });
+            }
+
+            // Add form validation
+            const formInputs = eventForm.querySelectorAll('input, select, textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const formGroup = this.closest('.form-group');
+                    if (formGroup && this.value.trim()) {
+                        formGroup.classList.remove('error');
+                        const errorMessage = formGroup.querySelector('.error-message');
+                        if (errorMessage) errorMessage.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

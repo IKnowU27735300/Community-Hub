@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+         :root {
+            --sidebar-width: 280px;
+            --header-height: 70px;
+            --primary-gradient: linear-gradient(135deg, var(--primary-color), #4a90e2);
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --hover-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 12px;
+            --spacing-unit: 1rem;
+        }
+        
+        .admin-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+        
+        .admin-sidebar {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.5rem;
+            position: fixed;
+            width: var(--sidebar-width);
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        .admin-sidebar h2 {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .admin-nav {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .admin-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-nav a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            transition: var(--hover-transition);
+            font-weight: 500;
+        }
+        
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .admin-nav i {
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .admin-main {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            margin-left: var(--sidebar-width);
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .admin-header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .admin-header h1 i {
+            color: var(--primary-color);
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .settings-section {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+        }
+        
+        .settings-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-section h2 i {
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            align-items: start;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: var(--text-color);
+            padding-top: 0.5rem;
+        }
+        
+        .form-group .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--hover-transition);
+            background: #f8fafc;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background: white;
+        }
+        
+        .form-group .help-text {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e2e8f0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked+.toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked+.toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--hover-transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn i {
+            font-size: 1.1rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            grid-column: 1 / -1;
+        }
+        
+        .alert.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .alert.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        @media (max-width: 1200px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <h2><i class="fas fa-shield-alt"></i> Admin Panel</h2>
+            <nav>
+                <ul class="admin-nav">
+                    <li><a href="admin.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="admin-events.html"><i class="fas fa-calendar"></i> Events</a></li>
+                    <li><a href="admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+                    <li><a href="admin-reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="admin-settings.html" class="active"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" id="adminLogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1><i class="fas fa-cog"></i> System Settings</h1>
+                <button class="btn" id="saveAllSettings">
+                    <i class="fas fa-save"></i> Save All Settings
+                </button>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-section">
+                    <h2><i class="fas fa-cog"></i> General Settings</h2>
+                    <div class="alert" id="settingsAlert"></div>
+
+                    <form id="generalSettings">
+                        <div class="form-group">
+                            <label>Site Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="siteName" required>
+                                <div class="help-text">The name of your community service platform</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Site Description</label>
+                            <div class="input-wrapper">
+                                <textarea id="siteDescription" rows="3"></textarea>
+                                <div class="help-text">A brief description of your platform</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contact Email</label>
+                            <div class="input-wrapper">
+                                <input type="email" id="contactEmail" required>
+                                <div class="help-text">Email address for platform communications</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Notification Email</label>
+                            <div class="input-wrapper">
+                                <input type="email" id="notificationEmail" required>
+                                <div class="help-text">Email address for sending notifications</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Timezone</label>
+                            <div class="input-wrapper">
+                                <select id="timezone" required>
+                                    <option value="UTC">UTC</option>
+                                    <option value="America/New_York">Eastern Time</option>
+                                    <option value="America/Chicago">Central Time</option>
+                                    <option value="America/Denver">Mountain Time</option>
+                                    <option value="America/Los_Angeles">Pacific Time</option>
+                                </select>
+                                <div class="help-text">Select your timezone for event scheduling</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date Format</label>
+                            <div class="input-wrapper">
+                                <select id="dateFormat" required>
+                                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                </select>
+                                <div class="help-text">Select your preferred date format</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Maximum Event Capacity</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="maxEventCapacity" min="1" max="1000" required>
+                                <div class="help-text">Maximum number of participants per event</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="settings-section">
+                    <h2><i class="fas fa-toggle-on"></i> Feature Settings</h2>
+                    <form id="featureSettings">
+                        <div class="form-group">
+                            <label>Maintenance Mode</label>
+                            <div class="input-wrapper">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="maintenanceMode">
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="help-text">Enable to put the site in maintenance mode</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Registration Open</label>
+                            <div class="input-wrapper">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="registrationOpen" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="help-text">Allow new users to register</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Event Creation</label>
+                            <div class="input-wrapper">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="eventCreation" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="help-text">Allow users to create new events</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="settings-section">
+                    <h2><i class="fas fa-bell"></i> Notification Settings</h2>
+                    <form id="notificationSettings">
+                        <div class="form-group">
+                            <label>Email Notifications</label>
+                            <div class="input-wrapper">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="help-text">Send email notifications for important updates</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Event Reminders</label>
+                            <div class="input-wrapper">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="eventReminders" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="help-text">Send reminders for upcoming events</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Registration Notifications</label>
+                            <div class="input-wrapper">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="registrationNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="help-text">Notify admins of new registrations</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Admin settings functionality
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('adminSettings')) || {
+                siteName: 'Event Vesta',
+                siteDescription: 'Connect with your community through meaningful events and activities',
+                contactEmail: 'admin@communityhub.com',
+                maintenanceMode: false,
+                registrationOpen: true,
+                eventCreation: true,
+                emailNotifications: true,
+                eventReminders: true,
+                registrationNotifications: true,
+                timezone: 'UTC',
+                dateFormat: 'MM/DD/YYYY',
+                maxEventCapacity: 100,
+                notificationEmail: 'notifications@communityhub.com'
+            };
+
+            // Load general settings
+            document.getElementById('siteName').value = settings.siteName;
+            document.getElementById('siteDescription').value = settings.siteDescription;
+            document.getElementById('contactEmail').value = settings.contactEmail;
+            document.getElementById('notificationEmail').value = settings.notificationEmail;
+            document.getElementById('timezone').value = settings.timezone;
+            document.getElementById('dateFormat').value = settings.dateFormat;
+            document.getElementById('maxEventCapacity').value = settings.maxEventCapacity;
+
+            // Load feature settings
+            document.getElementById('maintenanceMode').checked = settings.maintenanceMode;
+            document.getElementById('registrationOpen').checked = settings.registrationOpen;
+            document.getElementById('eventCreation').checked = settings.eventCreation;
+
+            // Load notification settings
+            document.getElementById('emailNotifications').checked = settings.emailNotifications;
+            document.getElementById('eventReminders').checked = settings.eventReminders;
+            document.getElementById('registrationNotifications').checked = settings.registrationNotifications;
+        }
+
+        function saveSettings() {
+            const settings = {
+                siteName: document.getElementById('siteName').value,
+                siteDescription: document.getElementById('siteDescription').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                notificationEmail: document.getElementById('notificationEmail').value,
+                timezone: document.getElementById('timezone').value,
+                dateFormat: document.getElementById('dateFormat').value,
+                maxEventCapacity: parseInt(document.getElementById('maxEventCapacity').value),
+                maintenanceMode: document.getElementById('maintenanceMode').checked,
+                registrationOpen: document.getElementById('registrationOpen').checked,
+                eventCreation: document.getElementById('eventCreation').checked,
+                emailNotifications: document.getElementById('emailNotifications').checked,
+                eventReminders: document.getElementById('eventReminders').checked,
+                registrationNotifications: document.getElementById('registrationNotifications').checked
+            };
+
+            localStorage.setItem('adminSettings', JSON.stringify(settings));
+            showAlert('Settings saved successfully!', 'success');
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('settingsAlert');
+            alert.textContent = message;
+            alert.className = `alert ${type}`;
+            alert.style.display = 'block';
+
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize settings page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check admin status
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.isAdmin) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Load settings
+            loadSettings();
+
+            // Save all settings
+            document.getElementById('saveAllSettings').addEventListener('click', function() {
+                saveSettings();
+            });
+
+            // Logout functionality
+            document.getElementById('adminLogout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

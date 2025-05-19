@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Connection Test</h1>
+    <div id="results"></div>
+
+    <script>
+        // List of files to check
+        const filesToCheck = [
+            'app.js',
+            'styles.css',
+            'events.html',
+            'index.html',
+            'event-details.html',
+            'clear-events.html',
+            'auth.html',
+            'auth.js',
+            'create-event.html',
+            'profile.html'
+        ];
+
+        // External resources to check
+        const externalResources = [
+            'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css',
+            'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'
+        ];
+
+        const resultsDiv = document.getElementById('results');
+
+        // Function to check if a file exists
+        async function checkFile(file) {
+            try {
+                const response = await fetch(file);
+                if (response.ok) {
+                    addResult(file, true);
+                } else {
+                    addResult(file, false, `Status: ${response.status}`);
+                }
+            } catch (error) {
+                addResult(file, false, error.message);
+            }
+        }
+
+        // Function to check if an external resource is accessible
+        async function checkExternalResource(url) {
+            try {
+                const response = await fetch(url, {
+                    mode: 'no-cors'
+                });
+                addResult(url, true);
+            } catch (error) {
+                addResult(url, false, error.message);
+            }
+        }
+
+        // Function to add a result to the page
+        function addResult(file, success, message = '') {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${success ? 'success' : 'error'}`;
+            resultDiv.textContent = `${file}: ${success ? 'OK' : 'ERROR'} ${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Check all files
+        filesToCheck.forEach(checkFile);
+        externalResources.forEach(checkExternalResource);
+    </script>
+</body>
+
+</html>

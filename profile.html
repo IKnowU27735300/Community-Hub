@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 2rem;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .profile-role {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .profile-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-title i {
+            color: var(--primary-color);
+        }
+        
+        .edit-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .detail-item {
+            margin-bottom: 1rem;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            color: var(--text-color);
+        }
+        
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        
+        .role-badge.participant {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .role-badge.volunteer {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--accent-color);
+        }
+        
+        .role-badge.organizer {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #eee;
+            color: var(--text-color);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .event-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .event-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .event-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .event-tab:hover:not(.active) {
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        .event-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .event-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .event-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-color);
+        }
+        
+        .event-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .event-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .action-btn.secondary {
+            background: #eee;
+            color: var(--text-color);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .no-events {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-color);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-container"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="create-event.html" class="nav-link" id="createEventLink" style="display: none;">Create Event</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="#" class="nav-link" id="logoutLink">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name" id="userName">Loading...</h1>
+                    <div class="profile-role" id="userRole">Loading...</div>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="eventsCount">0</div>
+                    <div class="stat-label">Events Attended</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="hoursCount">0</div>
+                    <div class="stat-label">Hours Volunteered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="impactScore">0</div>
+                    <div class="stat-label">Community Impact</div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-alt"></i> My Events
+                </h2>
+                <div class="event-tabs" id="eventTabs">
+                    <div class="event-tab active" data-tab="upcoming">Upcoming Events</div>
+                    <div class="event-tab" data-tab="past">Past Events</div>
+                    <div class="event-tab" data-tab="created" id="createdEventsTab" style="display: none;">Created Events</div>
+                </div>
+                <div class="event-list" id="eventsList">
+                    <!-- Events will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Update navigation based on role
+            const createEventLink = document.getElementById('createEventLink');
+            const createdEventsTab = document.getElementById('createdEventsTab');
+            if (user.role === 'organizer') {
+                createEventLink.style.display = 'block';
+                createdEventsTab.style.display = 'block';
+            }
+
+            // Update profile information
+            document.getElementById('userName').textContent = user.name || 'User';
+
+            // Set role badge
+            const roleBadge = document.getElementById('userRole');
+            roleBadge.className = 'profile-role ' + user.role;
+            roleBadge.innerHTML = `
+                <i class="fas ${getRoleIcon(user.role)}"></i>
+                ${capitalizeFirstLetter(user.role)}
+            `;
+
+            // Update stats
+            updateStats(user);
+
+            // Load events
+            loadEvents(user, 'upcoming');
+
+            // Handle tab switching
+            const tabs = document.querySelectorAll('.event-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    loadEvents(user, this.dataset.tab);
+                });
+            });
+
+            // Handle logout
+            document.getElementById('logoutLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+        });
+
+        function getRoleIcon(role) {
+            switch (role) {
+                case 'participant':
+                    return 'fa-user-friends';
+                case 'volunteer':
+                    return 'fa-hands-helping';
+                case 'organizer':
+                    return 'fa-calendar-check';
+                default:
+                    return 'fa-user';
+            }
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function updateStats(user) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            let eventsCount = 0;
+            let hoursCount = 0;
+            let impactScore = 0;
+
+            events.forEach(event => {
+                if (event.participants && event.participants.includes(user.email)) {
+                    eventsCount++;
+                    if (user.role === 'volunteer' && event.volunteers && event.volunteers.includes(user.email)) {
+                        hoursCount += event.duration || 0;
+                    }
+                }
+            });
+
+            impactScore = eventsCount * 10 + hoursCount;
+
+            document.getElementById('eventsCount').textContent = eventsCount;
+            document.getElementById('hoursCount').textContent = hoursCount;
+            document.getElementById('impactScore').textContent = impactScore;
+        }
+
+        function loadEvents(user, tab = 'upcoming') {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const eventsList = document.getElementById('eventsList');
+            const now = new Date();
+
+            let filteredEvents = events.filter(event => {
+                const eventDate = new Date(event.date);
+                if (tab === 'upcoming') {
+                    return eventDate >= now;
+                } else if (tab === 'past') {
+                    return eventDate < now;
+                } else if (tab === 'created') {
+                    return event.organizer === user.email;
+                }
+                return false;
+            });
+
+            if (user.role !== 'organizer') {
+                filteredEvents = filteredEvents.filter(event =>
+                    (event.participants && event.participants.includes(user.email)) ||
+                    (user.role === 'volunteer' && event.volunteers && event.volunteers.includes(user.email))
+                );
+            }
+
+            if (filteredEvents.length === 0) {
+                eventsList.innerHTML = `
+                    <div class="no-events">
+                        <i class="fas fa-calendar-times fa-3x" style="color: var(--text-color); margin-bottom: 1rem;"></i>
+                        <h3>No ${tab} events found</h3>
+                        <p>${tab === 'upcoming' ? 'Join some events to see them here!' : 
+                          tab === 'past' ? 'You haven\'t attended any past events yet.' : 
+                          'You haven\'t created any events yet.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventsList.innerHTML = filteredEvents.map(event => `
+                <div class="event-card">
+                    <div class="event-info">
+                        <h3>${event.title}</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> ${new Date(event.date).toLocaleDateString()}</span>
+                            <span><i class="fas fa-clock"></i> ${event.time}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> ${event.location}</span>
+                            ${user.role === 'volunteer' ? `<span><i class="fas fa-hourglass-half"></i> ${event.duration || 0} hours</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="event-actions">
+                        <a href="event-details.html?id=${event.id}" class="action-btn primary">
+                            <i class="fas fa-info-circle"></i> Details
+                        </a>
+                        ${user.role === 'organizer' && tab === 'created' ? `
+                            <button class="action-btn secondary" onclick="editEvent('${event.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn secondary" onclick="deleteEvent('${event.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editEvent(eventId) {
+            window.location.href = `create-event.html?id=${eventId}`;
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                const updatedEvents = events.filter(event => event.id !== eventId);
+                localStorage.setItem('events', JSON.stringify(updatedEvents));
+                loadEvents(JSON.parse(localStorage.getItem('user')), 'created');
+            }
+        }
+    </script>
+</body>
+
+</html>

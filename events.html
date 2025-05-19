@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+         :root {
+            --primary-color: #3a86ff;
+            --primary-dark: #2667cc;
+            --secondary-color: #8338ec;
+            --accent-color: #ff006e;
+            --text-color: #2b2d42;
+            --text-light: #6c757d;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            background-attachment: fixed;
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .logo::before {
+            content: "🌱";
+            margin-right: 8px;
+        }
+        
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png');
+            opacity: 0.1;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .hero-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .hero-shape-1 {
+            width: 150px;
+            height: 150px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .hero-shape-2 {
+            width: 100px;
+            height: 100px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        
+        .hero-shape-3 {
+            width: 80px;
+            height: 80px;
+            bottom: 10%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        .events-section {
+            padding: 3rem 0;
+        }
+        
+        .events-section h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .events-section h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            height: 100%;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(67, 97, 238, 0.15);
+        }
+        
+        .event-card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            position: relative;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .event-card-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-right: 100px;
+            /* Space for category tag */
+        }
+        
+        .event-category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .event-card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .event-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: rgba(67, 97, 238, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+        
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+        
+        .event-meta-item i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .event-description {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+        
+        .event-card-footer {
+            padding: 1.5rem;
+            background: rgba(67, 97, 238, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            border-top: 1px solid rgba(67, 97, 238, 0.1);
+        }
+        
+        .event-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+        }
+        
+        .btn-secondary {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-danger {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-container {
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .search-bar {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-bar button:hover {
+            background: var(--gradient-accent);
+        }
+        
+        .search-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .search-tag {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-tag:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-section h3 {
+            position: relative;
+            padding-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+        
+        .event-date {
+            color: var(--primary-color);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-date::before {
+            content: "📅";
+        }
+        
+        .event-location {
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .event-location::before {
+            content: "📍";
+        }
+        /* 3D Animation Keyframes */
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .no-events {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            grid-column: 1 / -1;
+        }
+        
+        .no-events i {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            font-size: 3.5rem;
+        }
+        
+        .no-events p {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="create-event.html" class="nav-link" id="createEventLink" style="display: none;">Create Event</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;">Profile</a>
+                <a href="auth.html" class="nav-link" id="authLink">Login</a>
+                <a href="#" class="nav-link" id="logoutLink" style="display: none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Upcoming Events</h1>
+            <p>Discover and join community events that make a difference.</p>
+            <div class="hero-decoration">
+                <div class="hero-shape hero-shape-1"></div>
+                <div class="hero-shape hero-shape-2"></div>
+                <div class="hero-shape hero-shape-3"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" id="event-search" placeholder="Search events by keyword..." aria-label="Search events">
+                    <button type="button" id="search-button" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="search-tags">
+                    <span class="search-tag" data-keyword="community">Community</span>
+                    <span class="search-tag" data-keyword="volunteer">Volunteer</span>
+                    <span class="search-tag" data-keyword="education">Education</span>
+                    <span class="search-tag" data-keyword="charity">Charity</span>
+                </div>
+            </div>
+
+            <div id="eventsList" class="events-grid">
+                <!-- Events will be populated by JavaScript -->
+            </div>
+            <div class="text-center" style="margin-top: 2rem;">
+                <a href="create-event.html" class="btn animate-pulse" id="createEventBtn" style="display: none;">Create New Event</a>
+                <a href="clear-events.html" class="btn btn-danger" id="clearEventsBtn" style="display: none; margin-left: 1rem;">Clear All Events</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Community Events</h3>
+                    <p>Bringing people together through meaningful events and activities.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Volunteer Opportunities</h3>
+                    <p>Make a difference in your community by volunteering.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Support Local</h3>
+                    <p>Help build a stronger, more connected community.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Event Vesta. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+                    // Check if user is logged in
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    if (!user) {
+                        window.location.href = 'auth.html';
+                        return;
+                    }
+
+                    // Update navigation based on user role
+                    const authLink = document.getElementById('authLink');
+                    const logoutLink = document.getElementById('logoutLink');
+                    const profileLink = document.getElementById('profileLink');
+                    const createEventLink = document.getElementById('createEventLink');
+                    const createEventBtn = document.getElementById('createEventBtn');
+
+                    authLink.style.display = 'none';
+                    logoutLink.style.display = 'block';
+                    profileLink.style.display = 'block';
+                    createEventLink.style.display = user.role === 'organizer' ? 'block' : 'none';
+                    createEventBtn.style.display = user.role === 'organizer' ? 'block' : 'none';
+
+                    // Handle logout
+                    logoutLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('user');
+                        window.location.href = 'index.html';
+                    });
+
+                    // Load events
+                    function loadEvents(searchTerm = '', category = '') {
+                        const eventsContainer = document.getElementById('eventsList');
+                        let events = JSON.parse(localStorage.getItem('events')) || [];
+
+                        // Sort events by date (most recent first)
+                        events.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                        // Filter events based on search term and category
+                        if (searchTerm || category) {
+                            events = events.filter(event => {
+                                const matchesSearch = searchTerm ?
+                                    event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    event.category.toLowerCase().includes(searchTerm.toLowerCase()) : true;
+
+                                const matchesCategory = category ?
+                                    event.category.toLowerCase() === category.toLowerCase() : true;
+
+                                return matchesSearch && matchesCategory;
+                            });
+                        }
+
+                        if (events.length === 0) {
+                            eventsContainer.innerHTML = `
+                        <div class="no-events">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No events found. Try adjusting your search criteria.</p>
+                        </div>
+                    `;
+                            return;
+                        }
+
+                        eventsContainer.innerHTML = events.map(event => {
+                                    // Ensure participants array exists
+                                    const participants = event.participants || [];
+                                    const maxParticipants = event.maxParticipants || 0;
+
+                                    return `
+                        <div class="event-card">
+                            <div class="event-card-header">
+                                <h3>${event.title}</h3>
+                                <span class="event-category">${event.category}</span>
+                            </div>
+                            <div class="event-card-body">
+                                <div class="event-meta">
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>${new Date(event.date).toLocaleDateString()}</span>
+                                    </div>
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>${event.time}</span>
+                                    </div>
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${event.location}</span>
+                                    </div>
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>${participants.length}/${maxParticipants}</span>
+                                    </div>
+                                </div>
+                                <p class="event-description">${event.description}</p>
+                            </div>
+                            <div class="event-card-footer">
+                                <a href="event-details.html?id=${event.id}" class="btn btn-primary">View Details</a>
+                                ${user.role === 'organizer' && event.organizer === user.email ? `
+                                    <button class="btn btn-danger" onclick="deleteEvent('${event.id}')">Delete</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Handle search functionality
+            const searchInput = document.getElementById('event-search');
+            const searchButton = document.getElementById('search-button');
+            const searchTags = document.querySelectorAll('.search-tag');
+
+            function performSearch() {
+                const searchTerm = searchInput.value.trim();
+                const activeTag = document.querySelector('.search-tag.active');
+                const category = activeTag ? activeTag.dataset.keyword : '';
+                loadEvents(searchTerm, category);
+            }
+
+            // Search input event listener
+            searchInput.addEventListener('input', performSearch);
+
+            // Search button event listener
+            searchButton.addEventListener('click', performSearch);
+
+            // Search tags event listeners
+            searchTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Toggle active class on clicked tag
+                    if (this.classList.contains('active')) {
+                        // If already active, deactivate it
+                        this.classList.remove('active');
+                        searchInput.value = '';
+                    } else {
+                        // Remove active class from all tags
+                        searchTags.forEach(t => t.classList.remove('active'));
+                        
+                        // Add active class to clicked tag
+                        this.classList.add('active');
+                        
+                        // Update search input with tag text
+                        searchInput.value = this.textContent;
+                    }
+                    
+                    // Perform search
+                    performSearch();
+                });
+            });
+
+            // Initial load of events
+            loadEvents();
+        });
+
+        // Delete event function
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                const updatedEvents = events.filter(event => event.id !== eventId);
+                localStorage.setItem('events', JSON.stringify(updatedEvents));
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+
+</html>

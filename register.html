@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .register-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .role-selection {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .role-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .role-option {
+            padding: 1rem 2rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .role-option:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        .role-option.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .role-specific-fields {
+            display: none;
+        }
+        
+        .role-specific-fields.active {
+            display: block;
+        }
+        
+        .auth-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-group input.error {
+            border-color: #ff4444;
+        }
+        
+        .error-message {
+            color: #ff4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .password-requirements {
+            font-size: 0.875rem;
+            color: var(--text-color);
+            margin-top: 0.5rem;
+        }
+        
+        .password-requirements ul {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+        }
+        
+        .password-requirements li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .password-requirements li.valid {
+            color: #4CAF50;
+        }
+        
+        .password-requirements li.valid::before {
+            content: "✓";
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-container"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="create-event.html" class="nav-link">Create Event</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="register-container">
+            <h2>Create Your Account</h2>
+
+            <div class="role-selection">
+                <h3>Select Your Role</h3>
+                <div class="role-options">
+                    <div class="role-option" data-role="participant">Participant</div>
+                    <div class="role-option" data-role="volunteer">Volunteer</div>
+                    <div class="role-option" data-role="organizer">Organizer</div>
+                </div>
+            </div>
+
+            <form id="registerForm">
+                <input type="hidden" id="selectedRole" name="role" value="">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <!-- Participant Specific Fields -->
+                <div class="role-specific-fields" id="participantFields">
+                    <div class="form-group">
+                        <label for="interests">Areas of Interest</label>
+                        <select id="interests" name="interests" multiple>
+                            <option value="education">Education</option>
+                            <option value="environment">Environment</option>
+                            <option value="health">Health</option>
+                            <option value="social">Social Services</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Volunteer Specific Fields -->
+                <div class="role-specific-fields" id="volunteerFields">
+                    <div class="form-group">
+                        <label for="skills">Skills</label>
+                        <select id="skills" name="skills" multiple>
+                            <option value="teaching">Teaching</option>
+                            <option value="medical">Medical</option>
+                            <option value="technical">Technical</option>
+                            <option value="organizational">Organizational</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="availability">Availability</label>
+                        <input type="text" id="availability" name="availability" placeholder="e.g., Weekends, Evenings">
+                    </div>
+                </div>
+
+                <!-- Organizer Specific Fields -->
+                <div class="role-specific-fields" id="organizerFields">
+                    <div class="form-group">
+                        <label for="organization">Organization Name</label>
+                        <input type="text" id="organization" name="organization">
+                    </div>
+                    <div class="form-group">
+                        <label for="organizationType">Organization Type</label>
+                        <select id="organizationType" name="organizationType">
+                            <option value="nonprofit">Non-Profit</option>
+                            <option value="community">Community Group</option>
+                            <option value="educational">Educational Institution</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-btn">Create Account</button>
+
+                <div class="login-link">
+                    Already have an account? <a href="auth.html">Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleOptions = document.querySelectorAll('.role-option');
+            const roleSpecificFields = document.querySelectorAll('.role-specific-fields');
+            const selectedRoleInput = document.getElementById('selectedRole');
+
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    roleOptions.forEach(opt => opt.classList.remove('active'));
+                    // Add active class to selected option
+                    this.classList.add('active');
+
+                    // Get selected role
+                    const role = this.dataset.role;
+                    selectedRoleInput.value = role;
+
+                    // Hide all role-specific fields
+                    roleSpecificFields.forEach(fields => fields.classList.remove('active'));
+
+                    // Show fields for selected role
+                    document.getElementById(`${role}Fields`).classList.add('active');
+                });
+            });
+
+            // Handle form submission
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    role: selectedRoleInput.value,
+                    // Add role-specific data
+                    ...getRoleSpecificData(selectedRoleInput.value)
+                };
+
+                // Store user data in localStorage
+                localStorage.setItem('user', JSON.stringify(formData));
+
+                // Redirect to profile page
+                window.location.href = 'profile.html';
+            });
+
+            function getRoleSpecificData(role) {
+                switch (role) {
+                    case 'participant':
+                        return {
+                            interests: Array.from(document.getElementById('interests').selectedOptions).map(opt => opt.value)
+                        };
+                    case 'volunteer':
+                        return {
+                            skills: Array.from(document.getElementById('skills').selectedOptions).map(opt => opt.value),
+                            availability: document.getElementById('availability').value
+                        };
+                    case 'organizer':
+                        return {
+                            organization: document.getElementById('organization').value,
+                            organizationType: document.getElementById('organizationType').value
+                        };
+                    default:
+                        return {};
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

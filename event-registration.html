@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+         :root {
+            --primary-color: #4a90e2;
+            --primary-dark: #357abd;
+            --secondary-color: #6c63ff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+        }
+        
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .logo::before {
+            content: "🌱";
+            margin-right: 8px;
+        }
+        
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .registration-section {
+            padding: 3rem 0;
+        }
+        
+        .registration-section h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .registration-section h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+        
+        .event-details-card {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .event-details-card h2 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+        }
+        
+        .event-meta-item i {
+            color: var(--primary-color);
+        }
+        
+        .event-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .registration-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .error-message {
+            color: var(--accent-color);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            padding: 0.75rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(74, 144, 226, 0.1);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .registration-success {
+            text-align: center;
+            padding: 3rem 0;
+            display: none;
+        }
+        
+        .registration-success i {
+            font-size: 4rem;
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+        
+        .registration-success h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .registration-success p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        .not-logged-in {
+            text-align: center;
+            padding: 3rem 0;
+            display: none;
+        }
+        
+        .not-logged-in h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .not-logged-in p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        .footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-section h3 {
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Event Vesta</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="create-event.html" class="nav-link">Create Event</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="auth.html" class="nav-link" id="authLink">Login</a>
+                <a href="#" class="nav-link" id="logoutLink" style="display: none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="registration-section">
+        <div class="container">
+            <h1 class="animate-slide-down">Event Registration</h1>
+
+            <div id="eventDetailsCard" class="event-details-card animate-slide-up delay-1">
+                <!-- Event details will be populated by JavaScript -->
+            </div>
+
+            <div id="registrationForm" class="registration-form animate-slide-up delay-2">
+                <h2>Registration Form</h2>
+                <form id="eventRegistrationForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="guests">Number of Guests</label>
+                        <input type="number" id="guests" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Register for Event</button>
+                </form>
+            </div>
+
+            <div id="registrationSuccess" class="registration-success animate-slide-up delay-2" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <h2>Registration Successful!</h2>
+                <p>Thank you for registering for this event. We look forward to seeing you there!</p>
+                <a href="/events.html" class="btn">Back to Events</a>
+            </div>
+
+            <div id="notLoggedIn" class="registration-success animate-slide-up delay-2" style="display: none;">
+                <i class="fas fa-user-lock"></i>
+                <h2>Login Required</h2>
+                <p>Please log in to register for this event.</p>
+                <a href="/auth.html" class="btn">Login</a>
+            </div>
+
+            <div id="eventNotFound" class="registration-success animate-slide-up delay-2" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <h2>Event Not Found</h2>
+                <p>The event you're trying to register for doesn't exist or has been removed.</p>
+                <a href="/events.html" class="btn">Back to Events</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section animate-on-scroll">
+                    <h3>Community Events</h3>
+                    <p>Bringing people together through meaningful events and activities.</p>
+                </div>
+                <div class="footer-section animate-on-scroll">
+                    <h3>Volunteer Opportunities</h3>
+                    <p>Make a difference in your community by volunteering.</p>
+                </div>
+                <div class="footer-section animate-on-scroll">
+                    <h3>Support Local</h3>
+                    <p>Help build a stronger, more connected community.</p>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <p>&copy; 2023 Event Vesta. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

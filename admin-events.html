@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Events - Event Vesta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            position: fixed;
+            width: 250px;
+            height: 100vh;
+        }
+        
+        .admin-sidebar h2 {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .admin-nav {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .admin-nav li {
+            margin-bottom: 1rem;
+        }
+        
+        .admin-nav a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-nav i {
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .admin-main {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .events-table th,
+        .events-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .events-table th {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .events-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .events-table tr:hover {
+            background: rgba(74, 144, 226, 0.05);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon {
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-icon:hover {
+            opacity: 0.9;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-bar select {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <h2>Admin Panel</h2>
+            <nav>
+                <ul class="admin-nav">
+                    <li><a href="admin.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="admin-events.html" class="active"><i class="fas fa-calendar"></i> Events</a></li>
+                    <li><a href="admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+                    <li><a href="admin-reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" id="adminLogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>Event Management</h1>
+                <button class="btn" id="createEventBtn">Create New Event</button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search events...">
+                <button class="btn" id="searchBtn">Search</button>
+            </div>
+
+            <div class="filter-bar">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="Community">Community</option>
+                    <option value="Education">Education</option>
+                    <option value="Environment">Environment</option>
+                    <option value="Health">Health</option>
+                    <option value="Social">Social</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Volunteer">Volunteer</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="past">Past</option>
+                </select>
+            </div>
+
+            <table class="events-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Location</th>
+                        <th>Category</th>
+                        <th>Registrations</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="eventsTableBody">
+                    <!-- Events will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Admin events functionality
+        function displayEvents(events = null) {
+            if (!events) {
+                events = JSON.parse(localStorage.getItem('events')) || [];
+            }
+
+            const tbody = document.getElementById('eventsTableBody');
+            tbody.innerHTML = events.map(event => `
+                <tr>
+                    <td>${event.title}</td>
+                    <td>${new Date(event.date).toLocaleDateString()}</td>
+                    <td>${event.time}</td>
+                    <td>${event.location}</td>
+                    <td>${event.category}</td>
+                    <td>${event.attendees ? event.attendees.length : 0}/${event.capacity || '∞'}</td>
+                    <td class="action-buttons">
+                        <button class="btn-icon btn-edit" onclick="editEvent(${event.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon btn-delete" onclick="deleteEvent(${event.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterEvents() {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const category = document.getElementById('categoryFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
+            let filteredEvents = events;
+
+            // Apply category filter
+            if (category) {
+                filteredEvents = filteredEvents.filter(event => event.category === category);
+            }
+
+            // Apply status filter
+            if (status) {
+                const today = new Date();
+                filteredEvents = filteredEvents.filter(event => {
+                    const eventDate = new Date(event.date);
+                    return status === 'upcoming' ? eventDate >= today : eventDate < today;
+                });
+            }
+
+            // Apply search filter
+            if (search) {
+                filteredEvents = filteredEvents.filter(event =>
+                    event.title.toLowerCase().includes(search) ||
+                    event.description.toLowerCase().includes(search) ||
+                    event.location.toLowerCase().includes(search)
+                );
+            }
+
+            displayEvents(filteredEvents);
+        }
+
+        function editEvent(eventId) {
+            window.location.href = `create-event.html?edit=${eventId}`;
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                const updatedEvents = events.filter(event => event.id !== eventId);
+                localStorage.setItem('events', JSON.stringify(updatedEvents));
+                displayEvents();
+            }
+        }
+
+        // Initialize events page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check admin status
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.isAdmin) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Display events
+            displayEvents();
+
+            // Set up event listeners
+            document.getElementById('searchInput').addEventListener('input', filterEvents);
+            document.getElementById('categoryFilter').addEventListener('change', filterEvents);
+            document.getElementById('statusFilter').addEventListener('change', filterEvents);
+
+            // Create event button
+            document.getElementById('createEventBtn').addEventListener('click', function() {
+                window.location.href = 'create-event.html';
+            });
+
+            // Logout functionality
+            document.getElementById('adminLogout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+
+</html>
