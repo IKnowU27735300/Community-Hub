@@ -4,7 +4,7 @@
 </head>
 <body>
     <div class="container">
-        <h1> 🫂 Community-Hub 🫂 </h1>
+        <h1> 🫂 Event-Vista 🫂 </h1>
         <p class="lead">Welcome to the <strong>Community Hub</strong> project! Connect, create, and manage community events seamlessly in a modern and intuitive platform.</p>
 
    <nav>
