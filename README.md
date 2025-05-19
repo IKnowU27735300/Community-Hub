@@ -4,15 +4,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>Community Hub</h1>
+        <h1> 🫂 Community-Hub 🫂 </h1>
         <p class="lead">Welcome to the <strong>Community Hub</strong> project! Connect, create, and manage community events seamlessly in a modern and intuitive platform.</p>
 
    <nav>
-            <a href="#installation">Installation</a>
-            <a href="#usage">Usage</a>
-            <a href="#file-structure">File Structure</a>
-            <a href="#contributing">Contributing</a>
-            <a href="#license">License</a>
+            <a href="#installation">Installation</a><br>
+            <a href="#usage">Usage</a><br>
+            <a href="#file-structure">File Structure</a><br>
+            <a href="#contributing">Contributing</a><br>
+            <a href="#license">License</a><br>
     </nav>
 
   <section id="installation">
