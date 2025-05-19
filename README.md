@@ -5,7 +5,7 @@
 <body>
     <div class="container">
         <h1> 🫂 Event-Vista 🫂 </h1>
-        <p class="lead">Welcome to the <strong>Community Hub</strong> project! Connect, create, and manage community events seamlessly in a modern and intuitive platform.</p>
+        <p class="lead">Welcome to the <strong>Event-Vista</strong> project! Connect, create, and manage community events seamlessly in a modern and intuitive platform.</p>
 
    <nav>
             <a href="#installation">Installation</a><br>
@@ -19,7 +19,7 @@
     <h2>Installation</h2>
     <p>To get started, follow these steps: 👍 </p>
     <pre><code>git clone https://github.com/yourusername/community-hub.git
-cd community-hub
+cd event-vista
 npm install
 </code></pre>
         </section>
@@ -79,7 +79,7 @@ MultipleFiles/
         </section>
 
   <footer>
-            Made with ❤ by Community Hub Contributors
+            Made with ❤️ by Event-Vista Contributors ❤️
         </footer>
     </div>
 </body>
